@@ -1,4 +1,3 @@
-# brewdog-random-beer-generator
 <h1 align="right">Brewdog Random Beer Generator</h1><br>
 
 ## Table of contents

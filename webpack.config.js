@@ -1,34 +1,37 @@
-const path = require('path')
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/app.js',
-  output: {
-    path: path.resolve('dist'),
-    filename: 'bundle.js'
+  entry: './src/index.js',
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, "src", "index.html"),
+    }),
+  ],
+  devServer: {
+    static: './dist',
   },
-  devtool: 'source-maps',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
+  },
   module: {
     rules: [
-      { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.css$/, loader: ['style-loader', 'css-loader'] },
-      { test: /\.s(a|c)ss$/, loader: ['style-loader', 'css-loader', 'sass-loader'] }
-    ]
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      }
+    ],
   },
-  devServer: {
-    contentBase: path.resolve('src'),
-    hot: true,
-    open: true,
-    port: 8000,
-    watchContentBase: true
-  },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({
-      template: 'src/index.html',
-      filename: 'index.html',
-      inject: 'body'
-    })
-  ]
-}
+};
